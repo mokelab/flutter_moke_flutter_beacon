@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'entity/range.dart';
 import 'moke_flutter_beacon_method_channel.dart';
 
 abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
@@ -29,5 +30,17 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
 
   Future<bool> initialize() {
     throw UnimplementedError('initialize() has not been implemented.');
+  }
+
+  Future<bool> requestPermission() {
+    throw UnimplementedError('requestPermission() has not been implemented.');
+  }
+
+  Future<bool> scanMonitor(Range range) {
+    throw UnimplementedError('scanMonitor() has not been implemented.');
+  }
+
+  Stream<dynamic> monitor() {
+    throw UnimplementedError('monitor() has not been implemented.');
   }
 }

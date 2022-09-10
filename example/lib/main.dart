@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:moke_flutter_beacon/entity/range.dart';
 import 'package:moke_flutter_beacon/moke_flutter_beacon.dart';
 
 void main() {
@@ -23,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    initMonitor();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -31,8 +33,8 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      platformVersion =
-          await _mokeFlutterBeaconPlugin.getPlatformVersion() ?? 'Unknown platform version';
+      platformVersion = await _mokeFlutterBeaconPlugin.getPlatformVersion() ??
+          'Unknown platform version';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -44,6 +46,23 @@ class _MyAppState extends State<MyApp> {
 
     setState(() {
       _platformVersion = platformVersion;
+    });
+  }
+
+  Future<void> initMonitor() async {
+    var granted = await MokeFlutterBeacon.requestPermission();
+    if (!granted) {
+      print("not granted");
+      return;
+    }
+    Range range =
+        //Range("test", null, null, null);
+        Range("test", "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", null, null);
+    var result = await MokeFlutterBeacon.scanMonitor(range);
+    print("monitor: $result");
+
+    MokeFlutterBeacon.monitor().listen((event) {
+      print("event ${event.event} UUID=${event.range.proximityUUID}");
     });
   }
 
