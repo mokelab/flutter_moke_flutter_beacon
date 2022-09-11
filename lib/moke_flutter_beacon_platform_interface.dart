@@ -40,7 +40,15 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
     throw UnimplementedError('scanMonitor() has not been implemented.');
   }
 
+  Future<bool> scanRange(Range range) {
+    throw UnimplementedError('scanRange() has not been implemented.');
+  }
+
   Stream<dynamic> monitor() {
     throw UnimplementedError('monitor() has not been implemented.');
+  }
+
+  Stream<dynamic> range() {
+    throw UnimplementedError('range() has not been implemented.');
   }
 }

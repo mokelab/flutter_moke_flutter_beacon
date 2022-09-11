@@ -10,6 +10,8 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
       const MethodChannel('com.mokelab.moke_flutter_beacon/method');
   final _monitorChannel =
       const EventChannel("com.mokelab.moke_flutter_beacon/monitor");
+  final _rangeChannel =
+      const EventChannel("com.mokelab.moke_flutter_beacon/range");
 
   @override
   Future<String?> getPlatformVersion() async {
@@ -35,7 +37,19 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
+  Future<bool> scanRange(Range range) async {
+    return await _methodChannel.invokeMethod<bool>(
+            'start_range', range.toMap()) ??
+        false;
+  }
+
+  @override
   Stream<dynamic> monitor() {
     return _monitorChannel.receiveBroadcastStream();
+  }
+
+  @override
+  Stream<dynamic> range() {
+    return _rangeChannel.receiveBroadcastStream();
   }
 }

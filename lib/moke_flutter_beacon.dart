@@ -1,5 +1,6 @@
 import 'entity/monitor.dart';
 import 'entity/range.dart';
+import 'entity/range_result.dart';
 import 'moke_flutter_beacon_platform_interface.dart';
 
 class MokeFlutterBeacon {
@@ -19,9 +20,19 @@ class MokeFlutterBeacon {
     return await MokeFlutterBeaconPlatform.instance.scanMonitor(range);
   }
 
+  static Future<bool> scanRange(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.scanRange(range);
+  }
+
   static Stream<MonitorResult> monitor() {
     return MokeFlutterBeaconPlatform.instance
         .monitor()
         .map((event) => MonitorResult.from(event));
+  }
+
+  static Stream<RangeResult> range() {
+    return MokeFlutterBeaconPlatform.instance
+        .range()
+        .map((event) => RangeResult.from(event));
   }
 }

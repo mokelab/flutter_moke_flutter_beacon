@@ -63,6 +63,13 @@ class _MyAppState extends State<MyApp> {
 
     MokeFlutterBeacon.monitor().listen((event) {
       print("event ${event.event} UUID=${event.range.proximityUUID}");
+      if (event.event == "didEnterRegion") {
+        MokeFlutterBeacon.scanRange(event.range);
+      }
+    });
+
+    MokeFlutterBeacon.range().listen((event) {
+      print("range \(event)");
     });
   }
 
