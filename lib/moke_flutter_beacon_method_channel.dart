@@ -31,15 +31,22 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
-  Future<bool> scanMonitor(Range range) async {
+  Future<bool> startMonitor(Range range) async {
     return await _methodChannel.invokeMethod<bool>('start', range.toMap()) ??
         false;
   }
 
   @override
-  Future<bool> scanRange(Range range) async {
+  Future<bool> startRange(Range range) async {
     return await _methodChannel.invokeMethod<bool>(
             'start_range', range.toMap()) ??
+        false;
+  }
+
+  @override
+  Future<bool> stopRange(Range range) async {
+    return await _methodChannel.invokeMethod<bool>(
+            'stop_range', range.toMap()) ??
         false;
   }
 

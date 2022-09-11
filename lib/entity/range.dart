@@ -6,6 +6,9 @@ class Range {
 
   Range(this.identifer, this.proximityUUID, this.major, this.minor);
 
+  Range copyWithIdentifier(String newIdentifer) =>
+      Range(newIdentifer, proximityUUID, major, minor);
+
   toMap() {
     var map = <String, dynamic>{
       "identifier": identifer,

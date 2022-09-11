@@ -55,7 +55,13 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if call.method == "start_range" {
             let r = self.startRange(call)
             result(r)
-            print("start result \(r)")
+            print("start_range result \(r)")
+            return
+        }
+        if call.method == "stop_range" {
+            let r = self.stopRange(call)
+            result(r)
+            print("stop_range result \(r)")
             return
         }
         result("iOS " + UIDevice.current.systemVersion)
@@ -76,7 +82,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if region == nil {
             return false
         }
-        print("region \(region!)")
+        print("startMonitor region \(region!)")
         self.locationManager.startMonitoring(for: region!)
         return true
     }
@@ -86,8 +92,18 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if region == nil {
             return false
         }
-        print("region \(region!)")
+        print("startRange region \(region!)")
         self.locationManager.startRangingBeacons(satisfying: region!.beaconIdentityConstraint)
+        return true
+    }
+    
+    private func stopRange(_ call: FlutterMethodCall) -> Bool {
+        let region = self.regionFromCall(call)
+        if region == nil {
+            return false
+        }
+        print("stopRange region \(region!)")
+        self.locationManager.stopRangingBeacons(satisfying: region!.beaconIdentityConstraint)
         return true
     }
     

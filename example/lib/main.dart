@@ -58,18 +58,23 @@ class _MyAppState extends State<MyApp> {
     Range range =
         //Range("test", null, null, null);
         Range("test", "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0", null, null);
-    var result = await MokeFlutterBeacon.scanMonitor(range);
+    var result = await MokeFlutterBeacon.startMonitor(range);
     print("monitor: $result");
 
     MokeFlutterBeacon.monitor().listen((event) {
       print("event ${event.event} UUID=${event.range.proximityUUID}");
       if (event.event == "didEnterRegion") {
-        MokeFlutterBeacon.scanRange(event.range);
+        MokeFlutterBeacon.startRange(event.range);
+      } else if (event.event == "didExitRegion") {
+        MokeFlutterBeacon.stopRange(event.range);
       }
     });
 
     MokeFlutterBeacon.range().listen((event) {
-      print("range \(event)");
+      print("range $event");
+      if (event.rangeList.isEmpty) return;
+      MokeFlutterBeacon.stopRange(
+          event.rangeList[0].copyWithIdentifier("test"));
     });
   }
 

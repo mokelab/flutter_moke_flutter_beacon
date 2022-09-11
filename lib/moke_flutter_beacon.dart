@@ -16,12 +16,16 @@ class MokeFlutterBeacon {
     return await MokeFlutterBeaconPlatform.instance.requestPermission();
   }
 
-  static Future<bool> scanMonitor(Range range) async {
-    return await MokeFlutterBeaconPlatform.instance.scanMonitor(range);
+  static Future<bool> startMonitor(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.startMonitor(range);
   }
 
-  static Future<bool> scanRange(Range range) async {
-    return await MokeFlutterBeaconPlatform.instance.scanRange(range);
+  static Future<bool> startRange(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.startRange(range);
+  }
+
+  static Future<bool> stopRange(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.stopRange(range);
   }
 
   static Stream<MonitorResult> monitor() {

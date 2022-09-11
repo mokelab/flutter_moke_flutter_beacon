@@ -36,12 +36,16 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
     throw UnimplementedError('requestPermission() has not been implemented.');
   }
 
-  Future<bool> scanMonitor(Range range) {
-    throw UnimplementedError('scanMonitor() has not been implemented.');
+  Future<bool> startMonitor(Range range) {
+    throw UnimplementedError('startMonitor() has not been implemented.');
   }
 
-  Future<bool> scanRange(Range range) {
-    throw UnimplementedError('scanRange() has not been implemented.');
+  Future<bool> startRange(Range range) {
+    throw UnimplementedError('startRange() has not been implemented.');
+  }
+
+  Future<bool> stopRange(Range range) {
+    throw UnimplementedError('stopRange() has not been implemented.');
   }
 
   Stream<dynamic> monitor() {

@@ -36,14 +36,20 @@ class MockMokeFlutterBeaconPlatform
   }
 
   @override
-  Future<bool> scanMonitor(Range range) {
-    // TODO: implement scanMonitor
+  Future<bool> startMonitor(Range range) {
+    // TODO: implement startMonitor
     throw UnimplementedError();
   }
 
   @override
-  Future<bool> scanRange(Range range) {
-    // TODO: implement scanRange
+  Future<bool> startRange(Range range) {
+    // TODO: implement startRange
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> stopRange(Range range) {
+    // TODO: implement stopRange
     throw UnimplementedError();
   }
 }
