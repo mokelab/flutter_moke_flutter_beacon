@@ -29,8 +29,12 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
 
     private lateinit var channel: MethodChannel
     private lateinit var beaconManager: BeaconManager
+
     private lateinit var beaconMonitor: BeaconMonitor
     private lateinit var monitorChannel: EventChannel
+
+    private lateinit var beaconRange: BeaconRange
+    private lateinit var rangeChannel: EventChannel
 
     private var permissionResult: Result? = null
 
@@ -45,9 +49,14 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
         beaconManager =
             BeaconManager.getInstanceForApplication(flutterPluginBinding.applicationContext)
         beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+
         beaconMonitor = BeaconMonitor(beaconManager)
         monitorChannel = EventChannel(messenger, "com.mokelab.moke_flutter_beacon/monitor")
         monitorChannel.setStreamHandler(beaconMonitor.streamHandler)
+
+        beaconRange = BeaconRange(beaconManager)
+        rangeChannel = EventChannel(messenger, "com.mokelab.moke_flutter_beacon/range")
+        rangeChannel.setStreamHandler(beaconRange.streamHandler)
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -70,6 +79,20 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
                 } catch (e: IllegalArgumentException) {
                     println("start failed ${e.message}")
                     result.error("IllegalArgumentException", "", null)
+                }
+            }
+            "start_range" -> {
+                try {
+                    beaconRange.start(call.toRegion())
+                } catch (e: Exception) {
+                    result.error("Error", e.message, e)
+                }
+            }
+            "stop_range" -> {
+                try {
+                    beaconRange.stop(call.toRegion())
+                } catch (e: Exception) {
+                    result.error("Error", e.message, e)
                 }
             }
             else -> {
