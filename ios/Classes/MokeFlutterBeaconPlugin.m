@@ -9,6 +9,10 @@
 #endif
 
 @implementation MokeFlutterBeaconPlugin
++ (void)setPluginRegistrantCallback:(FlutterPluginRegistrantCallback)callback {
+    [SwiftMokeFlutterBeaconPlugin setPluginRegistrantCallback:callback];
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   [SwiftMokeFlutterBeaconPlugin registerWithRegistrar:registrar];
 }

@@ -39,4 +39,8 @@ class MokeFlutterBeacon {
         .range()
         .map((event) => RangeResult.from(event));
   }
+
+  static Future<bool> stopBackground() {
+    return MokeFlutterBeaconPlatform.instance.stopBackground();
+  }
 }

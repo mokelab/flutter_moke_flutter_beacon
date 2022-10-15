@@ -55,4 +55,8 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
   Stream<dynamic> range() {
     throw UnimplementedError('range() has not been implemented.');
   }
+
+  Future<bool> stopBackground() {
+    throw UnimplementedError('stopBackground() has not been implemented.');
+  }
 }

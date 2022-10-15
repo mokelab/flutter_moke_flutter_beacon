@@ -5,7 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:moke_flutter_beacon/entity/range.dart';
 import 'package:moke_flutter_beacon/moke_flutter_beacon.dart';
 
+void callbackDispatcher(List<String> args) {
+  print("call from Background args=$args");
+  MokeFlutterBeacon.stopBackground();
+}
+
 void main() {
+  print("start main");
   runApp(const MyApp());
 }
 
@@ -50,6 +56,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initMonitor() async {
+    MokeFlutterBeacon.initialize(callbackDispatcher);
     var granted = await MokeFlutterBeacon.requestPermission();
     if (!granted) {
       print("not granted");

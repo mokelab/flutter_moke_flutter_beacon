@@ -7,10 +7,18 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                                            FlutterPlugin,
                                            CLLocationManagerDelegate
 {
+    private static let userDefaults = UserDefaults(suiteName: "com.mokelab.moke_flutter_beacon.userDefaults")!
+    private static var flutterPluginRegistrantCallback: FlutterPluginRegistrantCallback?
+    
     private var locationManager: CLLocationManager!
     private var permissionResult: FlutterResult? = nil
     private var monitorStreamHandler: MFBStreamHandler!
     private var rangeStreamHandler: MFBStreamHandler!
+    
+    @objc
+    public static func setPluginRegistrantCallback(_ callback: @escaping FlutterPluginRegistrantCallback) {
+        flutterPluginRegistrantCallback = callback
+    }
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.mokelab.moke_flutter_beacon/method", binaryMessenger: registrar.messenger())
@@ -38,6 +46,10 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         print("handle \(call.method)")
+        if call.method == "initialize" {
+            self.initialize(call: call, result: result)
+            return
+        }
         if call.method == "permission" {
             self.requestPermission(result: result)
             return
@@ -65,6 +77,22 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             return
         }
         result("iOS " + UIDevice.current.systemVersion)
+    }
+    
+    private func initialize(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        if let args = call.arguments as? Dictionary<String, Any> {
+            let handle = args["handle"] as? Int64
+            self.saveCallbackHandle(handle)
+        }
+    }
+    
+    private func saveCallbackHandle(_ handle: Int64?) {
+        if handle == nil { return }
+        SwiftMokeFlutterBeaconPlugin.userDefaults.setValue(handle, forKey: "handle")
+    }
+    
+    private func loadCallbackHandle() -> Int64? {
+        SwiftMokeFlutterBeaconPlugin.userDefaults.value(forKey: "handle") as? Int64
     }
     
     private func requestPermission(result: @escaping FlutterResult) {
@@ -165,6 +193,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: "",
                 region: beaconRegion
             )
+            self.callFromBackground(eventName: "didEnterRegion")
         }
     }
     
@@ -176,6 +205,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: "",
                 region: beaconRegion
             )
+            self.callFromBackground(eventName: "didExitRegion")
         }
     }
     
@@ -192,6 +222,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: state.toStr(),
                 region: beaconRegion
             )
+            self.callFromBackground(eventName: "didDetermineStateForRegion")
         }
     }
     
@@ -227,5 +258,41 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             "range": region.toDict()
         ] as [String : Any]
         sink!(result)
+    }
+    
+    private func callFromBackground(eventName: String) {
+        print("start callFromBackground")
+        guard let callbackHandle = self.loadCallbackHandle(),
+              let flutterCallbackInformation = FlutterCallbackCache.lookupCallbackInformation(callbackHandle)
+        else {
+            print("Failed to find callback")
+            return
+        }
+        var flutterEngine: FlutterEngine? = FlutterEngine(
+            name: "com.mokelab.moke_flutter_beacon.background",
+            project: nil,
+            allowHeadlessExecution: true
+        )
+        flutterEngine!.run(
+            withEntrypoint: flutterCallbackInformation.callbackName,
+            libraryURI: flutterCallbackInformation.callbackLibraryPath,
+            initialRoute: "",
+            entrypointArgs: [eventName]
+        )
+        SwiftMokeFlutterBeaconPlugin.flutterPluginRegistrantCallback?(flutterEngine!)
+        
+        var backgroundMethodChannel: FlutterMethodChannel? = FlutterMethodChannel(
+            name: "com.mokelab.moke_flutter_beacon/background",
+            binaryMessenger: flutterEngine!.binaryMessenger
+        )
+        func cleanupFlutterResources() {
+            flutterEngine?.destroyContext()
+            backgroundMethodChannel = nil
+            flutterEngine = nil
+        }
+        // just for cleanup
+        backgroundMethodChannel?.setMethodCallHandler { (call, result) in
+            cleanupFlutterResources()
+        }
     }
 }
