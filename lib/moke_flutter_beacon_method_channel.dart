@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 
 import 'entity/range.dart';
@@ -8,6 +10,8 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   /// The method channel used to interact with the native platform.
   final _methodChannel =
       const MethodChannel('com.mokelab.moke_flutter_beacon/method');
+  final _backgroundMethodChannel =
+      const MethodChannel('com.mokelab.moke_flutter_beacon/background');
   final _monitorChannel =
       const EventChannel("com.mokelab.moke_flutter_beacon/monitor");
   final _rangeChannel =
@@ -21,8 +25,13 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
-  Future<bool> initialize() async {
-    return await _methodChannel.invokeMethod<bool>('initialize') ?? false;
+  Future<bool> initialize(Function callbackDispatcher) async {
+    final callback = PluginUtilities.getCallbackHandle(callbackDispatcher);
+    if (callback == null) return false;
+    final int handle = callback.toRawHandle();
+    return await _methodChannel.invokeMethod<bool>(
+            'initialize', <String, dynamic>{"handle": handle}) ??
+        false;
   }
 
   @override
@@ -58,5 +67,10 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   @override
   Stream<dynamic> range() {
     return _rangeChannel.receiveBroadcastStream();
+  }
+
+  @override
+  Future<bool> stopBackground() async {
+    return await _backgroundMethodChannel.invokeMethod<bool>('stop') ?? false;
   }
 }
