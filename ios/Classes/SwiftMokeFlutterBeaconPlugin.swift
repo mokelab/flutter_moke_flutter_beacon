@@ -121,7 +121,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if region == nil {
             return false
         }
-        print("startRange region \(region!)")
+        NSLog("startRange region \(region!)")
         self.locationManager.startRangingBeacons(satisfying: region!.beaconIdentityConstraint)
         return true
     }
@@ -131,7 +131,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if region == nil {
             return false
         }
-        print("stopRange region \(region!)")
+        NSLog("stopRange region \(region!)")
         self.locationManager.stopRangingBeacons(satisfying: region!.beaconIdentityConstraint)
         return true
     }
@@ -172,7 +172,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
     }
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        print("didChangeAuthorization status=\(status)")
+        NSLog("didChangeAuthorization status=\(status)")
         if status == CLAuthorizationStatus.authorizedAlways {
             self.permissionResult?(true)
             self.permissionResult = nil
@@ -232,7 +232,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         didRangeBeacons beacons: [CLBeacon],
         in region: CLBeaconRegion
     ) {
-        print("didRangeBeacons \(beacons)")
+        NSLog("didRangeBeacons \(beacons)")
         if rangeStreamHandler.eventSink == nil {
             return
         } 
@@ -273,7 +273,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
     }
     
     private func callFromBackground(args: [String]) {
-        print("start callFromBackground")
+        NSLog("start callFromBackground")
         guard let callbackHandle = self.loadCallbackHandle(),
               let flutterCallbackInformation = FlutterCallbackCache.lookupCallbackInformation(callbackHandle)
         else {
