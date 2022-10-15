@@ -309,6 +309,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 if self.backgroundTaskID.rawValue != 0 {
                     return
                 }
+                self.locationManager.delegate = self
                 self.backgroundTaskID = UIApplication.shared.beginBackgroundTask()
                 let r = self.startRange(call)
                 result(r)
