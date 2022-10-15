@@ -60,6 +60,20 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
+  Future<bool> startBackgroundRange(Range range) async {
+    return await _backgroundMethodChannel.invokeMethod<bool>(
+            'start_range', range.toMap()) ??
+        false;
+  }
+
+  @override
+  Future<bool> stopBackgroundRange(Range range) async {
+    return await _backgroundMethodChannel.invokeMethod<bool>(
+            'stop_range', range.toMap()) ??
+        false;
+  }
+
+  @override
   Stream<dynamic> monitor() {
     return _monitorChannel.receiveBroadcastStream();
   }
