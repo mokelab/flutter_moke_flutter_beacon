@@ -9,6 +9,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
 {
     private static let userDefaults = UserDefaults(suiteName: "com.mokelab.moke_flutter_beacon.userDefaults")!
     private static var flutterPluginRegistrantCallback: FlutterPluginRegistrantCallback?
+    private var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
     
     private var locationManager: CLLocationManager!
     private var permissionResult: FlutterResult? = nil
@@ -302,7 +303,27 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             flutterEngine = nil
         }
         backgroundMethodChannel?.setMethodCallHandler { [weak self](call, result) in
-            self?.handle(call, result: result)
+            UIApplication.shared.beginBackgroundTask()
+            if call.method == "start_range" {
+                guard let self = self else { return }
+                if self.backgroundTaskID.rawValue != 0 {
+                    return
+                }
+                self.backgroundTaskID = UIApplication.shared.beginBackgroundTask()
+                let r = self.startRange(call)
+                result(r)
+                return
+            }
+            if call.method == "stop_range" {
+                guard let self = self else { return }
+                if self.backgroundTaskID.rawValue != 0 {
+                    return
+                }
+                let r = self.stopRange(call)
+                UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+                result(r)
+                return
+            }
             cleanupFlutterResources()
         }
     }
