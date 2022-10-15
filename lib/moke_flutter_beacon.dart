@@ -28,6 +28,14 @@ class MokeFlutterBeacon {
     return await MokeFlutterBeaconPlatform.instance.stopRange(range);
   }
 
+  static Future<bool> startBackgroundRange(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.startBackgroundRange(range);
+  }
+
+  static Future<bool> stopBackgroundRange(Range range) async {
+    return await MokeFlutterBeaconPlatform.instance.stopBackgroundRange(range);
+  }
+
   static Stream<MonitorResult> monitor() {
     return MokeFlutterBeaconPlatform.instance
         .monitor()
