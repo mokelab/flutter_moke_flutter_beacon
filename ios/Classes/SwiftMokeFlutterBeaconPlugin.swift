@@ -301,8 +301,8 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             backgroundMethodChannel = nil
             flutterEngine = nil
         }
-        // just for cleanup
-        backgroundMethodChannel?.setMethodCallHandler { (call, result) in
+        backgroundMethodChannel?.setMethodCallHandler { [weak self](call, result) in
+            self?.handle(call, result: result)
             cleanupFlutterResources()
         }
     }
