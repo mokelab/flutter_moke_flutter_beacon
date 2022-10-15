@@ -52,6 +52,24 @@ class MockMokeFlutterBeaconPlatform
     // TODO: implement stopRange
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> startBackgroundRange(Range range) {
+    // TODO: implement startBackgroundRange
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> stopBackground() {
+    // TODO: implement stopBackground
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> stopBackgroundRange(Range range) {
+    // TODO: implement stopBackgroundRange
+    throw UnimplementedError();
+  }
 }
 
 void main() {
