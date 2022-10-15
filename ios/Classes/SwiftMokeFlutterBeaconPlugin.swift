@@ -233,14 +233,15 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         in region: CLBeaconRegion
     ) {
         NSLog("didRangeBeacons \(beacons)")
-        if rangeStreamHandler.eventSink == nil {
-            return
-        } 
         var beaconDictList = [] as [[String: Any]]
         for beacon in beacons {
             beaconDictList.append(beacon.toDict())
         }
-        rangeStreamHandler.eventSink!(beaconDictList)
+        
+        if rangeStreamHandler.eventSink != nil {
+            rangeStreamHandler.eventSink!(beaconDictList)
+        }
+        
         let dictForBackground: [String: Any] = [
             "beacons": beaconDictList
         ]
