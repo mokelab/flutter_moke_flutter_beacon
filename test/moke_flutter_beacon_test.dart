@@ -12,7 +12,7 @@ class MockMokeFlutterBeaconPlatform
   Future<String?> getPlatformVersion() => Future.value('42');
 
   @override
-  Future<bool> initialize() {
+  Future<bool> initialize(Function callbackDispatcher) {
     // TODO: implement initialize
     throw UnimplementedError();
   }

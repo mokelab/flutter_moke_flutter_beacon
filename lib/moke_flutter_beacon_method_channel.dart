@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 
 import 'entity/range.dart';
@@ -21,8 +23,12 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
-  Future<bool> initialize() async {
-    return await _methodChannel.invokeMethod<bool>('initialize') ?? false;
+  Future<bool> initialize(Function callbackDispatcher) async {
+    final callback = PluginUtilities.getCallbackHandle(callbackDispatcher);
+    if (callback == null) return false;
+    final int handle = callback.toRawHandle();
+    return await _methodChannel.invokeMethod<bool>('initialize', handle) ??
+        false;
   }
 
   @override
