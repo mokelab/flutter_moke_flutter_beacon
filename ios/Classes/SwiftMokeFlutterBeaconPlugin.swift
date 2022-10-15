@@ -193,7 +193,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: "",
                 region: beaconRegion
             )
-            self.callFromBackground(eventName: "didEnterRegion")
+            self.callFromBackground(args: ["didEnterRegion", beaconRegion.identifier, beaconRegion.uuid.uuidString])
         }
     }
     
@@ -205,7 +205,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: "",
                 region: beaconRegion
             )
-            self.callFromBackground(eventName: "didExitRegion")
+            self.callFromBackground(args: ["didExitRegion", beaconRegion.identifier, beaconRegion.uuid.uuidString])
         }
     }
     
@@ -222,7 +222,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 state: state.toStr(),
                 region: beaconRegion
             )
-            self.callFromBackground(eventName: "didDetermineStateForRegion")
+            self.callFromBackground(args: ["didDetermineStateForRegion", beaconRegion.identifier, beaconRegion.uuid.uuidString])
         }
     }
     
@@ -240,6 +240,17 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             beaconDictList.append(beacon.toDict())
         }
         rangeStreamHandler.eventSink!(beaconDictList)
+        let dictForBackground: [String: Any] = [
+            "beacons": beaconDictList
+        ]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dictForBackground, options: [])
+            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            self.callFromBackground(args: ["didRangeBeacons", jsonStr])
+        } catch (let e) {
+            print(e)
+        }
+        
     }
 
     
@@ -260,7 +271,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         sink!(result)
     }
     
-    private func callFromBackground(eventName: String) {
+    private func callFromBackground(args: [String]) {
         print("start callFromBackground")
         guard let callbackHandle = self.loadCallbackHandle(),
               let flutterCallbackInformation = FlutterCallbackCache.lookupCallbackInformation(callbackHandle)
@@ -277,7 +288,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             withEntrypoint: flutterCallbackInformation.callbackName,
             libraryURI: flutterCallbackInformation.callbackLibraryPath,
             initialRoute: "",
-            entrypointArgs: [eventName]
+            entrypointArgs: args
         )
         SwiftMokeFlutterBeaconPlugin.flutterPluginRegistrantCallback?(flutterEngine!)
         
