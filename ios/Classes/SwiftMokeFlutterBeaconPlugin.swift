@@ -320,7 +320,8 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             }
             if call.method == "stop_range" {
                 guard let self = self else { return }
-                if self.backgroundTaskID.rawValue != 0 {
+                if self.backgroundTaskID.rawValue == 0 {
+                    NSLog("background Task ID is empty")
                     return
                 }
                 let r = self.stopRange(call)
