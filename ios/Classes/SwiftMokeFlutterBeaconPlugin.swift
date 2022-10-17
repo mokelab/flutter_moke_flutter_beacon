@@ -235,7 +235,9 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         NSLog("didRangeBeacons \(beacons)")
         var beaconDictList = [] as [[String: Any]]
         for beacon in beacons {
-            beaconDictList.append(beacon.toDict())
+            var dict = beacon.toDict()
+            dict["identifier"] = region.identifier
+            beaconDictList.append(dict)
         }
         
         if rangeStreamHandler.eventSink != nil {
