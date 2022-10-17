@@ -232,7 +232,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         didRangeBeacons beacons: [CLBeacon],
         in region: CLBeaconRegion
     ) {
-        NSLog("didRangeBeacons \(beacons)")
+        NSLog("didRangeBeacons \(beacons) identifier=\(region.identifier)")
         var beaconDictList = [] as [[String: Any]]
         for beacon in beacons {
             var dict = beacon.toDict()
