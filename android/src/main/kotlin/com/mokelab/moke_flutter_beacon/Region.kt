@@ -1,4 +1,4 @@
-package com.example.moke_flutter_beacon
+package com.mokelab.moke_flutter_beacon
 
 import io.flutter.plugin.common.MethodCall
 import org.altbeacon.beacon.Identifier

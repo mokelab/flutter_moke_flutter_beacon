@@ -1,4 +1,4 @@
-package com.example.moke_flutter_beacon
+package com.mokelab.moke_flutter_beacon
 
 import android.content.Context
 import android.os.Handler
@@ -6,9 +6,7 @@ import android.os.Looper
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.embedding.engine.loader.FlutterLoader
-import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 
 class BackgroundExecutor(
     private val beaconManagerDelegate: BeaconManagerDelegate,

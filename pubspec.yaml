@@ -35,7 +35,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.moke_flutter_beacon
+        package: com.mokelab.moke_flutter_beacon
         pluginClass: MokeFlutterBeaconPlugin
       ios:
         pluginClass: MokeFlutterBeaconPlugin
