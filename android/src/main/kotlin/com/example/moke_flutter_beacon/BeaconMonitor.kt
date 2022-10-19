@@ -18,7 +18,7 @@ class BeaconMonitor(
     private var eventSink: EventChannel.EventSink? = null
     private val handler = Handler(Looper.getMainLooper())
 
-    private val notifier = object : MonitorNotifier {
+    val notifier = object : MonitorNotifier {
         override fun didEnterRegion(region: Region) {
             sendEvent(
                 eventSink,
@@ -63,14 +63,16 @@ class BeaconMonitor(
         }
     }
 
+    init {
+        beaconManager.addMonitorNotifier(notifier)
+    }
+
     fun start(region: Region) {
         println("startMonitoring region=${region}")
         if (app is BeaconManagerDelegate) {
-            app.startMonitor(region, notifier)
+            app.startMonitor(region)
             return
         }
-        beaconManager.removeAllMonitorNotifiers()
-        beaconManager.addMonitorNotifier(notifier)
         beaconManager.startMonitoring(region)
         println("startMonitoring called")
     }

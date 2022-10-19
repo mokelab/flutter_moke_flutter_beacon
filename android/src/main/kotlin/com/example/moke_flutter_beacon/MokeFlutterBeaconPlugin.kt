@@ -48,21 +48,26 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
         )
         channel.setMethodCallHandler(this)
 
-        beaconManager =
-            BeaconManager.getInstanceForApplication(flutterPluginBinding.applicationContext)
+        val application = flutterPluginBinding.applicationContext as Application
+        beaconManager = BeaconManager.getInstanceForApplication(application)
         beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
 
-        beaconMonitor =
-            BeaconMonitor(beaconManager, flutterPluginBinding.applicationContext as Application)
+        beaconMonitor = BeaconMonitor(beaconManager, application)
         monitorChannel = EventChannel(messenger, "com.mokelab.moke_flutter_beacon/monitor")
         monitorChannel.setStreamHandler(beaconMonitor.streamHandler)
 
         beaconRange = BeaconRange(beaconManager)
         rangeChannel = EventChannel(messenger, "com.mokelab.moke_flutter_beacon/range")
         rangeChannel.setStreamHandler(beaconRange.streamHandler)
+
+        // setup for foreground service
+        if (application is BeaconManagerDelegate) {
+            application.setForegroundMonitorNotifier(beaconMonitor.notifier)
+            application.setForegroundRangeNotifier(beaconRange.notifier)
+        }
     }
 
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             "getPlatformVersion" -> {
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")

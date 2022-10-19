@@ -34,10 +34,12 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
         backgroundExecutor = BackgroundExecutor(this, this)
         monitorNotifier = BackgroundMonitorNotifier(backgroundExecutor)
         rangeNotifier = BackgroundRangeNotifier(backgroundExecutor)
+
+        beaconManager.addMonitorNotifier(monitorNotifier)
+        beaconManager.addRangeNotifier(rangeNotifier)
     }
 
-    override fun startMonitor(region: Region, notifier: MonitorNotifier?) {
-        beaconManager.removeAllMonitorNotifiers()
+    override fun startMonitor(region: Region) {
         createNotificationChannel()
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -57,10 +59,6 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
             println("Failed: e=${e}")
         }
 
-        if (notifier != null) {
-            beaconManager.addMonitorNotifier(notifier)
-        }
-        beaconManager.addMonitorNotifier(monitorNotifier)
         beaconManager.startMonitoring(region)
         println("startMonitor in Application done")
     }
@@ -70,13 +68,19 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
     }
 
     override fun startRange(region: Region) {
-        beaconManager.removeAllRangeNotifiers()
-        beaconManager.addRangeNotifier(rangeNotifier)
         beaconManager.startRangingBeacons(region)
     }
 
     override fun stopRange(region: Region) {
         beaconManager.stopRangingBeacons(region)
+    }
+
+    override fun setForegroundMonitorNotifier(notifier: MonitorNotifier) {
+        beaconManager.addMonitorNotifier(notifier)
+    }
+
+    override fun setForegroundRangeNotifier(notifier: RangeNotifier) {
+        beaconManager.addRangeNotifier(notifier)
     }
 
     private fun createNotificationChannel() {
