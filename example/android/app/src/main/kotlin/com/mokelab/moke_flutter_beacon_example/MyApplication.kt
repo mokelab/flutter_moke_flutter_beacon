@@ -1,4 +1,4 @@
-package com.example.moke_flutter_beacon_example
+package com.mokelab.moke_flutter_beacon_example
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,10 +7,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.moke_flutter_beacon.BackgroundExecutor
-import com.example.moke_flutter_beacon.BackgroundMonitorNotifier
-import com.example.moke_flutter_beacon.BackgroundRangeNotifier
-import com.example.moke_flutter_beacon.BeaconManagerDelegate
+import com.mokelab.moke_flutter_beacon.BackgroundExecutor
+import com.mokelab.moke_flutter_beacon.BackgroundMonitorNotifier
+import com.mokelab.moke_flutter_beacon.BackgroundRangeNotifier
+import com.mokelab.moke_flutter_beacon.BeaconManagerDelegate
 import io.flutter.app.FlutterApplication
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.MonitorNotifier

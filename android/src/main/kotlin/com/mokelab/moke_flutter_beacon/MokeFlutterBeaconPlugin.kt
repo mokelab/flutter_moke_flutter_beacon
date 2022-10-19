@@ -1,4 +1,4 @@
-package com.example.moke_flutter_beacon
+package com.mokelab.moke_flutter_beacon
 
 import android.app.Activity
 import android.app.Application

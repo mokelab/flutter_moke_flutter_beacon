@@ -1,9 +1,8 @@
-package com.example.moke_flutter_beacon
+package com.mokelab.moke_flutter_beacon
 
 import android.os.Handler
 import android.os.Looper
 import io.flutter.plugin.common.EventChannel
-import org.altbeacon.beacon.Beacon
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.RangeNotifier
 import org.altbeacon.beacon.Region
