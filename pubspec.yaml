@@ -1,6 +1,6 @@
 name: moke_flutter_beacon
 description: Supports iBeacon 
-version: 0.0.5+8
+version: 0.0.6+1
 homepage:
 
 environment:
