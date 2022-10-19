@@ -2,6 +2,7 @@ package com.example.moke_flutter_beacon
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -67,6 +68,8 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
             "initialize" -> {
+                val entryPointFunctionName = call.argument<String>("entryPointFunctionName") ?: ""
+                saveEntryPointFunctionName(entryPointFunctionName)
                 result.success(true)
             }
             "permission" -> {
@@ -142,6 +145,15 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
             return true
         }
         return false
+    }
+
+    private fun saveEntryPointFunctionName(name: String) {
+        val activity = activityRef.get() ?: return
+        val pref = activity.getSharedPreferences(
+            "com.mokelab.moke_flutter_beacon.pref",
+            Context.MODE_PRIVATE
+        )
+        pref.edit().putString("entrypoint", name).apply()
     }
 
     companion object {

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.moke_flutter_beacon.BackgroundMonitorNotifier
 import com.example.moke_flutter_beacon.BeaconManagerDelegate
 import io.flutter.app.FlutterApplication
 import org.altbeacon.beacon.BeaconManager
@@ -20,10 +21,12 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
     }
 
     private lateinit var beaconManager: BeaconManager
+    private lateinit var monitorNotifier: MonitorNotifier
 
     override fun onCreate() {
         super.onCreate()
         beaconManager = BeaconManager.getInstanceForApplication(this)
+        monitorNotifier = BackgroundMonitorNotifier(this)
     }
 
     override fun startMonitor(region: Region, notifier: MonitorNotifier?) {
@@ -50,6 +53,7 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
         if (notifier != null) {
             beaconManager.addMonitorNotifier(notifier)
         }
+        beaconManager.addMonitorNotifier(monitorNotifier)
         beaconManager.startMonitoring(region)
         println("startMonitor in Application done")
     }

@@ -25,12 +25,16 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
-  Future<bool> initialize(Function callbackDispatcher) async {
+  Future<bool> initialize(
+      Function callbackDispatcher, String entryPointFunctionName) async {
     final callback = PluginUtilities.getCallbackHandle(callbackDispatcher);
     if (callback == null) return false;
     final int handle = callback.toRawHandle();
     return await _methodChannel.invokeMethod<bool>(
-            'initialize', <String, dynamic>{"handle": handle}) ??
+            'initialize', <String, dynamic>{
+          "handle": handle,
+          "entryPointFunctionName": entryPointFunctionName
+        }) ??
         false;
   }
 
