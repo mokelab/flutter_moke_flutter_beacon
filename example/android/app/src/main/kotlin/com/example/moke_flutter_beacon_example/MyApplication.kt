@@ -7,11 +7,14 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.moke_flutter_beacon.BackgroundExecutor
 import com.example.moke_flutter_beacon.BackgroundMonitorNotifier
+import com.example.moke_flutter_beacon.BackgroundRangeNotifier
 import com.example.moke_flutter_beacon.BeaconManagerDelegate
 import io.flutter.app.FlutterApplication
 import org.altbeacon.beacon.BeaconManager
 import org.altbeacon.beacon.MonitorNotifier
+import org.altbeacon.beacon.RangeNotifier
 import org.altbeacon.beacon.Region
 
 class MyApplication : FlutterApplication(), BeaconManagerDelegate {
@@ -21,12 +24,16 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
     }
 
     private lateinit var beaconManager: BeaconManager
+    private lateinit var backgroundExecutor: BackgroundExecutor
     private lateinit var monitorNotifier: MonitorNotifier
+    private lateinit var rangeNotifier: RangeNotifier
 
     override fun onCreate() {
         super.onCreate()
         beaconManager = BeaconManager.getInstanceForApplication(this)
-        monitorNotifier = BackgroundMonitorNotifier(this)
+        backgroundExecutor = BackgroundExecutor(this, this)
+        monitorNotifier = BackgroundMonitorNotifier(backgroundExecutor)
+        rangeNotifier = BackgroundRangeNotifier(backgroundExecutor)
     }
 
     override fun startMonitor(region: Region, notifier: MonitorNotifier?) {
@@ -60,6 +67,16 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
 
     override fun stopMonitor(region: Region) {
         beaconManager.stopMonitoring(region)
+    }
+
+    override fun startRange(region: Region) {
+        beaconManager.removeAllRangeNotifiers()
+        beaconManager.addRangeNotifier(rangeNotifier)
+        beaconManager.startRangingBeacons(region)
+    }
+
+    override fun stopRange(region: Region) {
+        beaconManager.stopRangingBeacons(region)
     }
 
     private fun createNotificationChannel() {

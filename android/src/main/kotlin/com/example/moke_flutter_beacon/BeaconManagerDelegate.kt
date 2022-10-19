@@ -9,4 +9,6 @@ import org.altbeacon.beacon.Region
 interface BeaconManagerDelegate {
     fun startMonitor(region: Region, notifier: MonitorNotifier?)
     fun stopMonitor(region: Region)
+    fun startRange(region: Region)
+    fun stopRange(region: Region)
 }
