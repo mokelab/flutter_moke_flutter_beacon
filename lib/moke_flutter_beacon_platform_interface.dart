@@ -28,7 +28,8 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<bool> initialize(Function callbackDispatcher) {
+  Future<bool> initialize(
+      Function callbackDispatcher, String entryPointFunctionName) {
     throw UnimplementedError('initialize() has not been implemented.');
   }
 

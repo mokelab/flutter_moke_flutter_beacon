@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -5,8 +7,23 @@ import 'package:flutter/services.dart';
 import 'package:moke_flutter_beacon/entity/range.dart';
 import 'package:moke_flutter_beacon/moke_flutter_beacon.dart';
 
+@pragma("vm:entry-point")
 void callbackDispatcher(List<String> args) {
+  WidgetsFlutterBinding.ensureInitialized();
   print("call from Background args=$args");
+  if (args[0] == "didEnterRegion") {
+    MokeFlutterBeacon.startBackgroundRange(Range(args[1], args[2], null, null));
+  } else if (args[0] == "didExitRegion") {
+    MokeFlutterBeacon.stopBackgroundRange(Range(args[1], args[2], null, null));
+  } else if (args[0] == "didRangeBeacons") {
+    print("Called didRangeBeacons ${args[1]}");
+    Map<String, dynamic> beaconJSON = json.decode(args[1]);
+    List<dynamic> beacons = beaconJSON["beacons"] as List<dynamic>;
+    String identifier = beacons[0]["identifier"];
+    String uuid = beacons[0]["proximityUUID"];
+    print("identifier=$identifier uuid=$uuid");
+    MokeFlutterBeacon.stopBackgroundRange(Range("test", uuid, null, null));
+  }
   MokeFlutterBeacon.stopBackground();
 }
 
@@ -56,7 +73,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> initMonitor() async {
-    MokeFlutterBeacon.initialize(callbackDispatcher);
+    MokeFlutterBeacon.initialize(callbackDispatcher, "callbackDispatcher");
     var granted = await MokeFlutterBeacon.requestPermission();
     if (!granted) {
       print("not granted");

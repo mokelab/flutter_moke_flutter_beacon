@@ -8,8 +8,10 @@ class MokeFlutterBeacon {
     return MokeFlutterBeaconPlatform.instance.getPlatformVersion();
   }
 
-  static Future<bool> initialize(Function callback) async {
-    return await MokeFlutterBeaconPlatform.instance.initialize(callback);
+  static Future<bool> initialize(
+      Function callback, String entryPointFunctionName) async {
+    return await MokeFlutterBeaconPlatform.instance
+        .initialize(callback, entryPointFunctionName);
   }
 
   static Future<bool> requestPermission() async {

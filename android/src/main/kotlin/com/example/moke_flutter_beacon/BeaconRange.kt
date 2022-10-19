@@ -14,7 +14,7 @@ class BeaconRange(
     private var eventSink: EventChannel.EventSink? = null
     private val handler = Handler(Looper.getMainLooper())
 
-    private val notifier = RangeNotifier { beacons, region ->
+    val notifier = RangeNotifier { beacons, region ->
         sendEvent(eventSink, RangeResult(beacons))
     }
 
@@ -30,10 +30,12 @@ class BeaconRange(
         }
     }
 
+    init {
+        beaconManager.addRangeNotifier(notifier)
+    }
+
     fun start(region: Region) {
         println("startRangingBeacons region=${region}")
-        beaconManager.removeAllMonitorNotifiers()
-        beaconManager.addRangeNotifier(notifier)
         beaconManager.startRangingBeacons(region)
         println("startRangingBeacons called")
     }
