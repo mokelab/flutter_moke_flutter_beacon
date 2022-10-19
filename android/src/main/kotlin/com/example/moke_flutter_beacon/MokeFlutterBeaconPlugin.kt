@@ -1,6 +1,7 @@
 package com.example.moke_flutter_beacon
 
 import android.app.Activity
+import android.app.Application
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -50,7 +51,8 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
             BeaconManager.getInstanceForApplication(flutterPluginBinding.applicationContext)
         beaconManager.beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
 
-        beaconMonitor = BeaconMonitor(beaconManager)
+        beaconMonitor =
+            BeaconMonitor(beaconManager, flutterPluginBinding.applicationContext as Application)
         monitorChannel = EventChannel(messenger, "com.mokelab.moke_flutter_beacon/monitor")
         monitorChannel.setStreamHandler(beaconMonitor.streamHandler)
 

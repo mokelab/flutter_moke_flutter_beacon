@@ -1,5 +1,6 @@
 package com.example.moke_flutter_beacon
 
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import io.flutter.plugin.common.EventChannel
@@ -12,6 +13,7 @@ import org.altbeacon.beacon.Region
  */
 class BeaconMonitor(
     private val beaconManager: BeaconManager,
+    private val app: Application,
 ) {
     private var eventSink: EventChannel.EventSink? = null
     private val handler = Handler(Looper.getMainLooper())
@@ -63,6 +65,10 @@ class BeaconMonitor(
 
     fun start(region: Region) {
         println("startMonitoring region=${region}")
+        if (app is BeaconManagerDelegate) {
+            app.startMonitor(region, notifier)
+            return
+        }
         beaconManager.removeAllMonitorNotifiers()
         beaconManager.addMonitorNotifier(notifier)
         beaconManager.startMonitoring(region)
