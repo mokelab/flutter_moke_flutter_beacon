@@ -71,6 +71,18 @@ class MockMokeFlutterBeaconPlatform
     // TODO: implement stopBackgroundRange
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> debugWrite(String message) {
+    // TODO: implement debugWrite
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> debugRead() {
+    // TODO: implement debugRead
+    throw UnimplementedError();
+  }
 }
 
 void main() {

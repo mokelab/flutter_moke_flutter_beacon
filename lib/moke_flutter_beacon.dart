@@ -53,4 +53,12 @@ class MokeFlutterBeacon {
   static Future<bool> stopBackground() {
     return MokeFlutterBeaconPlatform.instance.stopBackground();
   }
+
+  static Future<bool> debugWrite(String message) {
+    return MokeFlutterBeaconPlatform.instance.debugWrite(message);
+  }
+
+  static Future<String> debugRead() {
+    return MokeFlutterBeaconPlatform.instance.debugRead();
+  }
 }
