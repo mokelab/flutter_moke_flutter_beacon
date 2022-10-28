@@ -378,7 +378,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                     }
                 }
             }
-            cleanupFlutterResources()
+            // cleanupFlutterResources()
         }
     }
 }
