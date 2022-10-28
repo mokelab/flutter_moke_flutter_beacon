@@ -90,7 +90,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             if strInFile == nil {
                 result("")
             } else {
-                result(strInFile)
+                result(strInFile!)
             }
             return
         }
@@ -353,7 +353,10 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             }
             if call.method == "debug_write" {
                 if let args = call.arguments as? Dictionary<String, Any> {
-                    let message = args["msg"] as? String
+                    guard let message = args["msg"] as? String else {
+                        result(false)
+                        return
+                    }
                     guard let dir = FileManager.default.urls(for: .documentDirectory,
                                                              in: .userDomainMask
                     ).first else {
@@ -366,11 +369,11 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                     if strInFile == nil {
                         strInFile = ""
                     } else {
-                        strInFile.append("\n")
+                        strInFile!.append("\n")
                     }
-                    strInFile.append(message)
+                    strInFile!.append(message)
                     do {
-                        try strInFile.write(to: file, atomically: true, encoding: .utf8)
+                        try strInFile!.write(to: file, atomically: true, encoding: .utf8)
                         result(true)
                     } catch {
                         NSLog("Failed to write debug message")
