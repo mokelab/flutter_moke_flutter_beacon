@@ -346,11 +346,6 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 result(r)
                 return
             }
-            if call.method == "stop" {
-                cleanupFlutterResources()
-                result(true)
-                return
-            }
             if call.method == "debug_write" {
                 if let args = call.arguments as? Dictionary<String, Any> {
                     guard let message = args["msg"] as? String else {
@@ -375,12 +370,15 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                     do {
                         try strInFile!.write(to: file, atomically: true, encoding: .utf8)
                         result(true)
+                        return
                     } catch {
                         NSLog("Failed to write debug message")
                         result(false)
+                        return
                     }
                 }
             }
+            cleanupFlutterResources()
         }
     }
 }
