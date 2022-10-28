@@ -77,6 +77,23 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             print("stop_range result \(r)")
             return
         }
+        if call.method == "debug_read" {
+            guard let dir = FileManager.default.urls(for: .documentDirectory,
+                                                     in: .userDomainMask
+            ) else {
+                result(false)
+                return
+            }
+            let file = dir.appendingPathComponent("debug_log.txt")
+            // read
+            let strInFile = try? String(contentsOf: file)
+            if strInFile == nil {
+                result("")
+            } else {
+                result(strInFile)
+            }
+            return
+        }
         result("iOS " + UIDevice.current.systemVersion)
     }
     
@@ -329,7 +346,38 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                 result(r)
                 return
             }
-            cleanupFlutterResources()
+            if call.method == "stop" {
+                cleanupFlutterResources()
+                result(true)
+                return
+            }
+            if call.method == "debug_write" {
+                if let args = call.arguments as? Dictionary<String, Any> {
+                    let message = args["msg"] as? String
+                    guard let dir = FileManager.default.urls(for: .documentDirectory,
+                                                             in: .userDomainMask
+                    ) else {
+                        result(false)
+                        return
+                    }
+                    let file = dir.appendingPathComponent("debug_log.txt")
+                    // read
+                    var strInFile = try? String(contentsOf: file)
+                    if strInFile == nil {
+                        strInFile = ""
+                    } else {
+                        strInFile.append("\n")
+                    }
+                    strInFile.append(message)
+                    do {
+                        try strInFile.write(to: file, atomically: true, encoding: .utf8)
+                        result(true)
+                    } catch {
+                        NSLog("Failed to write debug message")
+                        result(false)
+                    }
+                }
+            }
         }
     }
 }

@@ -94,8 +94,8 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
 
   @override
   Future<bool> debugWrite(String message) async {
-    return await _backgroundMethodChannel.invokeMethod<bool>(
-            'debug_write', message) ??
+    return await _backgroundMethodChannel
+            .invokeMethod<bool>('debug_write', {"msg": message}) ??
         false;
   }
 
