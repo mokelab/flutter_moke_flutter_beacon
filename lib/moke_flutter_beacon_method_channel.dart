@@ -91,4 +91,16 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   Future<bool> stopBackground() async {
     return await _backgroundMethodChannel.invokeMethod<bool>('stop') ?? false;
   }
+
+  @override
+  Future<bool> debugWrite(String message) async {
+    return await _backgroundMethodChannel
+            .invokeMethod<bool>('debug_write', {"msg": message}) ??
+        false;
+  }
+
+  @override
+  Future<String> debugRead() async {
+    return await _methodChannel.invokeMethod<String>('debug_read') ?? "";
+  }
 }

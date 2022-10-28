@@ -69,4 +69,12 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
   Future<bool> stopBackground() {
     throw UnimplementedError('stopBackground() has not been implemented.');
   }
+
+  Future<bool> debugWrite(String message) {
+    throw UnimplementedError('debugWrite() has not been implemented.');
+  }
+
+  Future<String> debugRead() {
+    throw UnimplementedError('debugRead() has not been implemented.');
+  }
 }
