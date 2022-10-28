@@ -80,7 +80,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         if call.method == "debug_read" {
             guard let dir = FileManager.default.urls(for: .documentDirectory,
                                                      in: .userDomainMask
-            ) else {
+            ).first else {
                 result(false)
                 return
             }
@@ -356,7 +356,7 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
                     let message = args["msg"] as? String
                     guard let dir = FileManager.default.urls(for: .documentDirectory,
                                                              in: .userDomainMask
-                    ) else {
+                    ).first else {
                         result(false)
                         return
                     }
