@@ -75,8 +75,12 @@ class BackgroundExecutor(
 
     private fun writeToLocalFile(msg: String) {
         val file = File(context.cacheDir, "debug.txt")
-        val current = file.readText()
-        file.writeText(current + "\n" + msg)
+        if (file.exists()) {
+            val current = file.readText()
+            file.writeText(current + "\n" + msg)
+        } else {
+            file.writeText(msg)
+        }
     }
 
     private fun loadEntryPointFunctionName(): String {
