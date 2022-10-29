@@ -15,6 +15,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import org.altbeacon.beacon.*
+import java.io.File
 import java.lang.IllegalArgumentException
 import java.lang.ref.WeakReference
 
@@ -105,6 +106,10 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
                     result.error("Error", e.message, e)
                 }
             }
+            "debug_read" -> {
+                val str = readFromLocalFile()
+                result.success(str)
+            }
             else -> {
                 result.notImplemented()
             }
@@ -160,6 +165,15 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
         )
         pref.edit().putString("entrypoint", name).apply()
     }
+
+    // region debug read write
+
+    private fun readFromLocalFile(): String {
+        val activity = activityRef.get() ?: return ""
+        val file = File(activity.cacheDir, "debug.txt")
+        return file.readText()
+    }
+
 
     companion object {
         private const val REQUEST_PERMISSION = 1122

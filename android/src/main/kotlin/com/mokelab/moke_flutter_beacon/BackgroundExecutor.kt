@@ -7,6 +7,7 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.embedding.engine.loader.FlutterLoader
 import io.flutter.plugin.common.MethodChannel
+import java.io.File
 
 class BackgroundExecutor(
     private val beaconManagerDelegate: BeaconManagerDelegate,
@@ -53,6 +54,11 @@ class BackgroundExecutor(
                         "stop" -> {
                             engine.destroy()
                         }
+                        "debug_write" -> {
+                            val msg = call.argument<String>("msg") ?: ""
+                            writeToLocalFile(msg)
+                            result.success(true)
+                        }
                     }
                 }
 
@@ -65,6 +71,12 @@ class BackgroundExecutor(
                 )
             }
         }
+    }
+
+    private fun writeToLocalFile(msg: String) {
+        val file = File(context.cacheDir, "debug.txt")
+        val current = file.readText()
+        file.writeText(current + "\n" + msg)
     }
 
     private fun loadEntryPointFunctionName(): String {
