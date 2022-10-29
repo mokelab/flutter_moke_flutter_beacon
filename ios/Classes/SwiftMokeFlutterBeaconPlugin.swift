@@ -159,6 +159,11 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             let proximityUUID = args["proximityUUID"] as? String
             let major = args["major"] as? Int
             let minor = args["minor"] as? Int
+            if proximityUUID == nil {
+                return CLBeaconRegion(beaconIdentityConstraint: CLBeaconIdentityConstraint.init(),
+                                      identifier: identifier ?? ""
+                )
+            }
             if major == nil && minor == nil {
                 return CLBeaconRegion(
                     beaconIdentityConstraint: CLBeaconIdentityConstraint.init(
