@@ -140,7 +140,9 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             defaults.setValue(token2 ?? "", forKey: "token2")
             defaults.setValue(token3 ?? "", forKey: "token3")
             defaults.synchronize()
+            return true
         }
+        return false
     }
     
     private func startMonitor(_ call: FlutterMethodCall) -> Bool {
