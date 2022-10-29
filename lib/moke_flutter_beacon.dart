@@ -18,6 +18,12 @@ class MokeFlutterBeacon {
     return await MokeFlutterBeaconPlatform.instance.requestPermission();
   }
 
+  static Future<bool> saveTokens(
+      String token1, String token2, String token3) async {
+    return await MokeFlutterBeaconPlatform.instance
+        .saveTokens(token1, token2, token3);
+  }
+
   static Future<bool> startMonitor(Range range) async {
     return await MokeFlutterBeaconPlatform.instance.startMonitor(range);
   }

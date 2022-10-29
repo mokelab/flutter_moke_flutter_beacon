@@ -44,6 +44,16 @@ class MethodChannelMokeFlutterBeacon extends MokeFlutterBeaconPlatform {
   }
 
   @override
+  Future<bool> saveTokens(String token1, String token2, String token3) async {
+    return await _methodChannel.invokeMethod<bool>('save_tokens', {
+          "token1": token1,
+          "token2": token2,
+          "token3": token3,
+        }) ??
+        false;
+  }
+
+  @override
   Future<bool> startMonitor(Range range) async {
     return await _methodChannel.invokeMethod<bool>('start', range.toMap()) ??
         false;

@@ -83,6 +83,12 @@ class MockMokeFlutterBeaconPlatform
     // TODO: implement debugRead
     throw UnimplementedError();
   }
+
+  @override
+  Future<bool> saveTokens(String token1, String token2, String token3) {
+    // TODO: implement saveTokens
+    throw UnimplementedError();
+  }
 }
 
 void main() {
