@@ -59,6 +59,12 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
             result("iOS " + UIDevice.current.systemVersion)
             return
         }
+        if call.method == "save_tokens" {
+            let r = self.saveTokens(call)
+            result(r)
+            print("save tokens done")
+            return
+        }
         if call.method == "start" {
             let r = self.startMonitor(call)
             result(r)
@@ -121,6 +127,20 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         }
         self.permissionResult = result
         self.locationManager.requestAlwaysAuthorization()
+    }
+    
+    private func saveTokens(_ call: FlutterMethodCall) -> Bool {
+        if let args = call.arguments as? Dictionary<String, Any> {
+            let token1 = args["token1"] as? String
+            let token2 = args["token2"] as? String
+            let token3 = args["token3"] as? String
+            
+            let defaults = SwiftMokeFlutterBeaconPlugin.userDefaults
+            defaults.setValue(token1 ?? "", forKey: "token1")
+            defaults.setValue(token2 ?? "", forKey: "token2")
+            defaults.setValue(token3 ?? "", forKey: "token3")
+            defaults.synchronize()
+        }
     }
     
     private func startMonitor(_ call: FlutterMethodCall) -> Bool {
@@ -255,6 +275,12 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         in region: CLBeaconRegion
     ) {
         NSLog("didRangeBeacons \(beacons) identifier=\(region.identifier)")
+        
+        let defaults = SwiftMokeFlutterBeaconPlugin.userDefaults
+        let token1 = defaults.string(forKey: "token1") ?? ""
+        let token2 = defaults.string(forKey: "token2") ?? ""
+        let token3 = defaults.string(forKey: "token3") ?? ""
+        
         var beaconDictList = [] as [[String: Any]]
         for beacon in beacons {
             var dict = beacon.toDict()
@@ -267,7 +293,8 @@ public class SwiftMokeFlutterBeaconPlugin: NSObject,
         }
         
         let dictForBackground: [String: Any] = [
-            "beacons": beaconDictList
+            "beacons": beaconDictList,
+            "tokens": [token1, token2, token3],
         ]
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: dictForBackground, options: [])

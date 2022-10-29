@@ -33,6 +33,10 @@ abstract class MokeFlutterBeaconPlatform extends PlatformInterface {
     throw UnimplementedError('initialize() has not been implemented.');
   }
 
+  Future<bool> saveTokens(String token1, String token2, String token3) {
+    throw UnimplementedError('saveTokens() has not been implemented.');
+  }
+
   Future<bool> requestPermission() {
     throw UnimplementedError('requestPermission() has not been implemented.');
   }

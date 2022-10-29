@@ -24,6 +24,11 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
     ActivityAware,
     MethodCallHandler,
     PluginRegistry.RequestPermissionsResultListener {
+    companion object {
+        private const val PREF_NAME = "moke_flutter_beacon_pref"
+        private const val REQUEST_PERMISSION = 1122
+    }
+
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -82,6 +87,22 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
                 val activity = activityRef.get() ?: return
                 permissionResult = result
                 PermissionHandler.request(activity, REQUEST_PERMISSION)
+            }
+            "save_tokens" -> {
+                val activity = activityRef.get() ?: return
+                val token1 = call.argument<String>("token1") ?: ""
+                val token2 = call.argument<String>("token2") ?: ""
+                val token3 = call.argument<String>("token3") ?: ""
+
+                val pref =
+                    activity.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                pref.edit()
+                    .putString("token1", token1)
+                    .putString("token2", token2)
+                    .putString("token3", token3)
+                    .apply()
+                result.success(true)
+                return
             }
             "start" -> {
                 try {
@@ -174,8 +195,4 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
         return if (file.exists()) file.readText() else ""
     }
 
-
-    companion object {
-        private const val REQUEST_PERMISSION = 1122
-    }
 }

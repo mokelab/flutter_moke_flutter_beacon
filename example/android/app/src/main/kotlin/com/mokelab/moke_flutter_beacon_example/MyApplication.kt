@@ -33,7 +33,7 @@ class MyApplication : FlutterApplication(), BeaconManagerDelegate {
         beaconManager = BeaconManager.getInstanceForApplication(this)
         backgroundExecutor = BackgroundExecutor(this, this)
         monitorNotifier = BackgroundMonitorNotifier(backgroundExecutor)
-        rangeNotifier = BackgroundRangeNotifier(backgroundExecutor)
+        rangeNotifier = BackgroundRangeNotifier(backgroundExecutor, this)
 
         beaconManager.addMonitorNotifier(monitorNotifier)
         beaconManager.addRangeNotifier(rangeNotifier)
