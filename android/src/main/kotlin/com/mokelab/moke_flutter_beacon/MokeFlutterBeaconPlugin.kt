@@ -171,7 +171,7 @@ class MokeFlutterBeaconPlugin : FlutterPlugin,
     private fun readFromLocalFile(): String {
         val activity = activityRef.get() ?: return ""
         val file = File(activity.cacheDir, "debug.txt")
-        return file.readText()
+        return if (file.exists()) file.readText() else ""
     }
 
 
